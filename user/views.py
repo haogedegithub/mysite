@@ -22,7 +22,6 @@ def login_for_medal(request):
         data['status'] = 'ERROR'
     return JsonResponse(data)
 
-
 def login(request):
     if request.method == 'POST':
         login_form = LoginForm(request.POST)
@@ -35,8 +34,7 @@ def login(request):
 
     context = {}
     context['login_form'] = login_form
-    return render(request, 'login.html', context)
-
+    return render(request, 'user/login.html', context)
 
 def register(request):
     if request.method == 'POST':
@@ -57,18 +55,16 @@ def register(request):
 
     context = {}
     context['reg_form'] = reg_form
-    return render(request, 'register.html', context)
-
-
+    return render(request, 'user/register.html', context)
+    
 def logout(request):
     auth.logout(request)
     return redirect(request.GET.get('from', reverse('home')))
 
-
 def user_info(request):
     context = {}
-    return render(request, 'user_info.html', context)
-
+    return render(request, 'user/user_info.html', context)
+    
 
 def change_nickname(request):
     redirect_to = request.GET.get('from', reverse('home'))
@@ -92,7 +88,6 @@ def change_nickname(request):
     context['return_back_url'] = redirect_to
     return render(request, 'form.html', context)
 
-
 def bind_email(request):
     redirect_to = request.GET.get('from', reverse('home'))
 
@@ -112,8 +107,7 @@ def bind_email(request):
     context['submit_text'] = '绑定'
     context['form'] = form
     context['return_back_url'] = redirect_to
-    return render(request, 'bind_email.html', context)
-
+    return render(request, 'user/bind_email.html', context)
 
 def send_verification_code(request):
     email = request.GET.get('email', '')
@@ -129,7 +123,7 @@ def send_verification_code(request):
         else:
             request.session['bind_email_code'] = code
             request.session['send_code_time'] = now
-
+            
             # 发送邮件
             send_mail(
                 '绑定邮箱',

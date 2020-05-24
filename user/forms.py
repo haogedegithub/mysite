@@ -2,12 +2,11 @@ from django import forms
 from django.contrib import auth
 from django.contrib.auth.models import User
 
-
 class LoginForm(forms.Form):
-    username = forms.CharField(label='用户名',
-                               widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '请输入用户名'}))
-    password = forms.CharField(label='密码',
-                               widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': '请输入密码'}))
+    username = forms.CharField(label='用户名', 
+                               widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'请输入用户名'}))
+    password = forms.CharField(label='密码', 
+                               widget=forms.PasswordInput(attrs={'class':'form-control', 'placeholder':'请输入密码'}))
 
     def clean(self):
         username = self.cleaned_data['username']
@@ -15,27 +14,24 @@ class LoginForm(forms.Form):
 
         user = auth.authenticate(username=username, password=password)
         if user is None:
-            # 错误提示
             raise forms.ValidationError('用户名或密码不正确')
         else:
             self.cleaned_data['user'] = user
         return self.cleaned_data
 
-
 class RegForm(forms.Form):
-    username = forms.CharField(label='用户名',
-                               max_length=20,
-                               min_length=7,
-                               widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '请输入7-20位用户名'}))
-    email = forms.EmailField(label='邮箱',
-                             widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': '请输入邮箱'}))
-    password = forms.CharField(label='密码',
+    username = forms.CharField(label='用户名', 
+                               max_length=30,
+                               min_length=3,
+                               widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'请输入3-30位用户名'}))
+    email = forms.EmailField(label='邮箱', 
+                             widget=forms.EmailInput(attrs={'class':'form-control', 'placeholder':'请输入邮箱'}))
+    password = forms.CharField(label='密码', 
                                min_length=6,
-                               widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': '请输入密码'}))
-    password_again = forms.CharField(label='再输入一次密码',
+                               widget=forms.PasswordInput(attrs={'class':'form-control', 'placeholder':'请输入密码'}))
+    password_again = forms.CharField(label='再输入一次密码', 
                                      min_length=6,
-                                     widget=forms.PasswordInput(
-                                         attrs={'class': 'form-control', 'placeholder': '再输入一次密码'}))
+                                     widget=forms.PasswordInput(attrs={'class':'form-control', 'placeholder':'再输入一次密码'}))
 
     def clean_username(self):
         username = self.cleaned_data['username']
@@ -56,11 +52,14 @@ class RegForm(forms.Form):
             raise forms.ValidationError('两次输入的密码不一致')
         return password_again
 
-
 class ChangeNicknameForm(forms.Form):
-    nickname_new = forms.CharField(label='新的昵称',
-                                   max_length=20,
-                                   widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '请输入新昵称'}))
+    nickname_new = forms.CharField(
+        label='新的昵称', 
+        max_length=20,
+        widget=forms.TextInput(
+            attrs={'class':'form-control', 'placeholder':'请输入新的昵称'}
+        )
+    )
 
     def __init__(self, *args, **kwargs):
         if 'user' in kwargs:
@@ -81,19 +80,18 @@ class ChangeNicknameForm(forms.Form):
             raise forms.ValidationError("新的昵称不能为空")
         return nickname_new
 
-
 class BindEmailForm(forms.Form):
     email = forms.EmailField(
         label='邮箱',
         widget=forms.EmailInput(
-            attrs={'class': 'form-control', 'placeholder': '请输入正确的邮箱'}
+            attrs={'class':'form-control', 'placeholder':'请输入正确的邮箱'}
         )
     )
     verification_code = forms.CharField(
         label='验证码',
         required=False,
         widget=forms.TextInput(
-            attrs={'class': 'form-control', 'placeholder': '点击“发送验证码”发送到邮箱'}
+            attrs={'class':'form-control', 'placeholder':'点击“发送验证码”发送到邮箱'}
         )
     )
 
@@ -101,7 +99,6 @@ class BindEmailForm(forms.Form):
         if 'request' in kwargs:
             self.request = kwargs.pop('request')
         super(BindEmailForm, self).__init__(*args, **kwargs)
-
 
     def clean(self):
         # 判断用户是否登录
